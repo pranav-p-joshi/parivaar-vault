@@ -1,0 +1,52 @@
+<ion-modal [isOpen]="isOpen()" (didDismiss)="close()" class="viewer-modal">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar>
+        <ion-title>{{ file()?.name }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="share()" aria-label="Share or download">
+            <ion-icon slot="icon-only" name="share-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="close()" aria-label="Close viewer">
+            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content
+      class="viewer-content"
+      [scrollY]="zoomed()"
+      [scrollX]="zoomed()"
+    >
+      @if (!url()) {
+      <div class="center">
+        <ion-spinner name="crescent" aria-label="Decrypting"></ion-spinner>
+      </div>
+      } @else if (isImage()) {
+      <button
+        type="button"
+        class="image-wrap"
+        [class.zoomed]="zoomed()"
+        (click)="toggleZoom()"
+        [attr.aria-label]="zoomed() ? 'Zoom out' : 'Zoom in'"
+      >
+        <img [src]="url()" [alt]="file()?.name" />
+      </button>
+      } @else if (canEmbedPdf()) {
+      <iframe
+        [src]="safeUrl()"
+        [title]="file()?.name ?? 'PDF'"
+        class="pdf-frame"
+      ></iframe>
+      } @else {
+      <div class="center stack">
+        <p>This file type opens in another app.</p>
+        <ion-button (click)="openExternally()">
+          <ion-icon slot="start" name="open-outline"></ion-icon>
+          Open file
+        </ion-button>
+      </div>
+      }
+    </ion-content>
+  </ng-template>
+</ion-modal>

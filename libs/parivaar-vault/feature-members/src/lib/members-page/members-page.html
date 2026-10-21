@@ -1,0 +1,88 @@
+<ion-header class="ion-no-border pv-topbar">
+  <ion-toolbar>
+    <ion-title>Family</ion-title>
+  </ion-toolbar>
+  <div class="tricolor"></div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="pv-page">
+    <shared-section-header
+      title="Family members"
+      [count]="members.count() + ' members'"
+    ></shared-section-header>
+
+    @if (cards().length) {
+    <div class="pv-doclist pv-rise">
+      @for (card of cards(); track card.member.id) {
+      <div class="famcard">
+        <button
+          type="button"
+          class="famcard-main pv-pressable"
+          (click)="open(card.member.id)"
+        >
+          <span class="av" [style.background]="members.colorOf(card.member)"
+            >{{ initials(card.member.name) }}</span
+          >
+          <span class="meta">
+            <span class="nm">{{ card.member.name }}</span>
+            <span class="rel">{{ card.member.relation }}</span>
+          </span>
+          <span class="cnt">{{ card.count }}<small>docs</small></span>
+        </button>
+        <ion-button
+          fill="clear"
+          size="small"
+          [routerLink]="['/family', card.member.id, 'edit']"
+          [attr.aria-label]="'Edit ' + card.member.name"
+        >
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-button>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="pv-empty">No family members yet. Add the first one below.</div>
+    }
+
+    <form
+      class="pv-form pv-animate-in"
+      (submit)="$event.preventDefault(); add()"
+    >
+      <div class="pv-eyebrow">Add a member</div>
+      <div class="pv-grid2">
+        <ion-input
+          label="Full name"
+          labelPlacement="stacked"
+          fill="outline"
+          placeholder="e.g. Sunita Joshi"
+          [ngModel]="name()"
+          (ngModelChange)="name.set($event)"
+          name="name"
+          autocapitalize="words"
+          required
+        ></ion-input>
+        <ion-select
+          label="Relation"
+          labelPlacement="stacked"
+          fill="outline"
+          interface="popover"
+          [ngModel]="relation()"
+          (ngModelChange)="relation.set($event)"
+          name="relation"
+        >
+          @for (r of relations; track r) {
+          <ion-select-option [value]="r">{{ r }}</ion-select-option>
+          }
+        </ion-select>
+      </div>
+      <ion-button
+        type="submit"
+        expand="block"
+        class="pv-btn"
+        [disabled]="!name().trim() || saving()"
+        >Add member</ion-button
+      >
+    </form>
+  </div>
+</ion-content>

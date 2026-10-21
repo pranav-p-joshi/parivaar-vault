@@ -1,0 +1,50 @@
+.upload {
+  border: 2px dashed var(--pv-line);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  color: var(--pv-muted);
+  font-size: 14px;
+  background: var(--pv-surface-2);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  strong {
+    display: block;
+    color: var(--pv-fg);
+    font-size: 15px;
+  }
+}
+
+.capture-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.scan-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.imgpreview {
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--pv-surface-2);
+  display: block;
+}
+
+.preview {
+  margin: 4px 0 6px;
+}
+
+ion-input.low {
+  --border-color: var(--pv-saffron);
+  --highlight-color-focused: var(--pv-saffron);
+}

@@ -1,0 +1,297 @@
+<ion-content [fullscreen]="true" class="auth-content">
+  <div class="wrap">
+    <div class="logo pv-animate-in">
+      <div class="mark" aria-hidden="true">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+      </div>
+      <div class="brand">
+        Parivaar Vault<small>परिवार · family documents</small>
+      </div>
+    </div>
+
+    @if (awaitingCode()) {
+      <h1 class="pv-animate-in">Confirm your {{ verifyChannel() === 'phone' ? 'number' : 'email' }}</h1>
+      <p class="lead pv-animate-in" style="--pv-delay: 40ms">
+        @if (verifyChannel() === 'phone') {
+          We sent a code by SMS to +91 {{ suMobile() }}. Enter it to finish creating your vault.
+        } @else {
+          We sent a confirmation email to {{ suEmail() }}.
+        }
+      </p>
+      <form class="panel pv-animate-in" (submit)="$event.preventDefault(); verify()">
+        @if (verifyChannel() === 'email') {
+          <p class="pv-note left">
+            Open the confirmation link in that email, then come back and sign in with your email and password.
+            If the email contains a code instead, enter it below.
+          </p>
+          <ion-button expand="block" type="button" class="pv-btn" (click)="goToSignIn()">I have confirmed, sign in</ion-button>
+        }
+        <ion-input
+          label="Verification code"
+          labelPlacement="stacked"
+          fill="outline"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          placeholder="123456"
+          [maxlength]="8"
+          [value]="code()"
+          (ionInput)="code.set(digits($event.detail.value, 8))"
+          name="code"
+        ></ion-input>
+        @if (codeError()) {
+          <p class="err" role="alert">{{ codeError() }}</p>
+        }
+        <ion-button expand="block" type="submit" [class]="verifyChannel() === 'email' ? 'pv-btn-sec' : 'pv-btn'" [disabled]="busy()">
+          @if (busy()) {
+            <ion-spinner name="crescent" aria-label="Verifying"></ion-spinner>
+          } @else {
+            Verify and continue
+          }
+        </ion-button>
+        <ion-button expand="block" fill="clear" size="small" (click)="cancelVerify()">Start over</ion-button>
+      </form>
+    } @else { Verify and continue }
+      </ion-button>
+      <ion-button
+        expand="block"
+        fill="clear"
+        size="small"
+        (click)="cancelVerify()"
+        >Start over</ion-button
+      >
+    </form>
+    } @else {
+    <h1 class="pv-animate-in" style="--pv-delay: 40ms">
+      One safe place for every family document.
+    </h1>
+    <p class="lead pv-animate-in" style="--pv-delay: 80ms">
+      Aadhaar, PAN, Voter ID, licences, certificates. Encrypted on your phone,
+      unlocked by you.
+    </p>
+
+    @if (!cloudEnabled) {
+    <div class="banner pv-animate-in" role="note">
+      <ion-icon name="cloud-offline-outline" aria-hidden="true"></ion-icon>
+      <span
+        >Cloud sign-in is not configured in this build, so the account lives on
+        this device only.</span
+      >
+    </div>
+    }
+
+    <div class="seg pv-animate-in" role="tablist" style="--pv-delay: 120ms">
+      <button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="tab() === 'signin'"
+        (click)="setTab('signin')"
+      >
+        Sign in
+      </button>
+      <button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="tab() === 'signup'"
+        (click)="setTab('signup')"
+      >
+        Create account
+      </button>
+    </div>
+
+    @if (tab() === 'signin') {
+    <form
+      class="panel pv-animate-in"
+      (submit)="$event.preventDefault(); signIn()"
+    >
+      @if (!canSignIn()) {
+      <p class="pv-note left">
+        No vault on this device yet. Create an account to get started.
+      </p>
+      } @else if (familyName()) {
+      <p class="pv-note left">Signing in to the {{ familyName() }} vault.</p>
+      } @if (usesPhone) {
+      <div class="phone">
+        <span class="cc">+91</span>
+        <ion-input
+          label="Mobile number"
+          labelPlacement="stacked"
+          fill="outline"
+          inputmode="numeric"
+          autocomplete="tel-national"
+          placeholder="98765 43210"
+          [maxlength]="10"
+          [value]="siIdentifier()"
+          (ionInput)="siIdentifier.set(digits($event.detail.value))"
+          name="mobile"
+        ></ion-input>
+      </div>
+      } @else {
+      <ion-input
+        label="Email"
+        labelPlacement="stacked"
+        fill="outline"
+        type="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        [value]="siIdentifier()"
+        (ionInput)="siIdentifier.set($event.detail.value ?? '')"
+        name="email"
+      ></ion-input>
+      }
+      <ion-input
+        label="Password"
+        labelPlacement="stacked"
+        fill="outline"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Your vault password"
+        [value]="siPassword()"
+        (ionInput)="siPassword.set($event.detail.value ?? '')"
+        name="password"
+      >
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+      </ion-input>
+      @if (siError()) {
+      <p class="err" role="alert">{{ siError() }}</p>
+      }
+      <ion-button
+        expand="block"
+        type="submit"
+        class="pv-btn"
+        [disabled]="busy() || !canSignIn()"
+      >
+        @if (busy()) {
+        <ion-spinner name="crescent" aria-label="Signing in"></ion-spinner>
+        } @else { Sign in }
+      </ion-button>
+      <p class="pv-note">
+        Biometric unlock (Face ID / fingerprint) arrives with the native build.
+      </p>
+    </form>
+    } @else {
+    <form
+      class="panel pv-animate-in"
+      (submit)="$event.preventDefault(); signUp()"
+    >
+      @if (hasLocalVault() && !cloudEnabled) {
+      <p class="err">
+        This device already has a family vault. Sign in, or clear all data from
+        Settings to start over.
+      </p>
+      }
+      <ion-input
+        label="Family name"
+        labelPlacement="stacked"
+        fill="outline"
+        placeholder="e.g. Joshi Family"
+        [value]="suFamily()"
+        (ionInput)="suFamily.set($event.detail.value ?? '')"
+        name="family"
+        autocapitalize="words"
+      ></ion-input>
+      <ion-input
+        label="Your name (family head)"
+        labelPlacement="stacked"
+        fill="outline"
+        placeholder="e.g. Pranav Joshi"
+        autocomplete="name"
+        [value]="suName()"
+        (ionInput)="suName.set($event.detail.value ?? '')"
+        name="name"
+        autocapitalize="words"
+      ></ion-input>
+      <div class="phone">
+        <span class="cc">+91</span>
+        <ion-input
+          label="Mobile number"
+          labelPlacement="stacked"
+          fill="outline"
+          inputmode="numeric"
+          autocomplete="tel-national"
+          placeholder="98765 43210"
+          [maxlength]="10"
+          [value]="suMobile()"
+          (ionInput)="suMobile.set(digits($event.detail.value))"
+          name="suMobile"
+        ></ion-input>
+      </div>
+      <ion-input
+        [label]="usesPhone ? 'Email (optional, for backup recovery)' : 'Email'"
+        labelPlacement="stacked"
+        fill="outline"
+        type="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        [value]="suEmail()"
+        (ionInput)="suEmail.set($event.detail.value ?? '')"
+        name="email"
+      ></ion-input>
+      <div>
+        <ion-input
+          label="Password"
+          labelPlacement="stacked"
+          fill="outline"
+          type="password"
+          autocomplete="new-password"
+          placeholder="Choose a password"
+          [value]="suPassword()"
+          (ionInput)="suPassword.set($event.detail.value ?? '')"
+          name="suPassword"
+        >
+          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+        </ion-input>
+        <div class="meter" aria-hidden="true">
+          <span
+            [style.width.%]="strength().score * 25"
+            [style.background]="strength().color"
+          ></span>
+        </div>
+        <div class="meter-txt">
+          {{ strength().label ? strength().label + ' password' : 'At least 8
+          characters. Mix letters, numbers and symbols.' }}
+        </div>
+      </div>
+      <ion-input
+        label="Confirm password"
+        labelPlacement="stacked"
+        fill="outline"
+        type="password"
+        autocomplete="new-password"
+        placeholder="Type it again"
+        [value]="suConfirm()"
+        (ionInput)="suConfirm.set($event.detail.value ?? '')"
+        name="confirm"
+      >
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+      </ion-input>
+      <ion-checkbox
+        labelPlacement="end"
+        justify="start"
+        class="check"
+        [checked]="suTerms()"
+        (ionChange)="suTerms.set($event.detail.checked)"
+      >
+        I understand my documents are stored only on this device and I am
+        responsible for keeping a backup.
+      </ion-checkbox>
+      @if (suError()) {
+      <p class="err" role="alert">{{ suError() }}</p>
+      }
+      <ion-button
+        expand="block"
+        type="submit"
+        class="pv-btn"
+        [disabled]="busy() || (hasLocalVault() && !cloudEnabled)"
+      >
+        @if (busy()) {
+        <ion-spinner name="crescent" aria-label="Creating vault"></ion-spinner>
+        } @else { Create family vault }
+      </ion-button>
+    </form>
+    } }
+
+    <p class="foot">
+      Your documents never leave this phone unless you share them.
+    </p>
+  </div>
+</ion-content>

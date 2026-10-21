@@ -1,0 +1,123 @@
+.who-content {
+  --background:
+    radial-gradient(
+      900px 500px at 50% -10%,
+      rgba(255, 154, 77, 0.22),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 500px at 110% 100%,
+      rgba(31, 47, 110, 0.7),
+      transparent 60%
+    ),
+    var(--pv-bg);
+}
+
+.wrap {
+  max-width: 440px;
+  margin: 0 auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: calc(28px + env(safe-area-inset-top)) 20px
+    calc(28px + env(safe-area-inset-bottom));
+}
+
+h1 {
+  font-family: var(--pv-display);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.lead {
+  color: var(--pv-muted);
+  margin: -8px 0 0;
+  font-size: 15px;
+  max-width: 34ch;
+}
+
+.who {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.who-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border-radius: 16px;
+  background: var(--pv-surface);
+  border: 1.5px solid var(--pv-line);
+  font-weight: 700;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--pv-fg);
+  min-width: 0;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--pv-saffron);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .av {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--pv-display);
+    font-weight: 800;
+    font-size: 24px;
+    color: #fff;
+    box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+  }
+  .nm {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .rel {
+    font-size: 11px;
+    color: var(--pv-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  &.add .av {
+    background: var(--pv-surface-2);
+    color: var(--pv-muted);
+    border: 2px dashed var(--pv-line);
+    box-shadow: none;
+  }
+}
+
+.panel {
+  background: var(--pv-surface);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: var(--pv-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--pv-line);
+}
+
+.foot {
+  margin-top: auto;
+  font-size: 12px;
+  color: var(--pv-muted);
+  text-align: center;
+}

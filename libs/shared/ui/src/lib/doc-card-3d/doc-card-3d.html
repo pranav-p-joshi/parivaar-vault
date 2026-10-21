@@ -1,0 +1,36 @@
+<div class="stage">
+  <div
+    class="card3d"
+    [class.float]="floating()"
+    [class.flipped]="flipped()"
+    [class.static]="!interactive()"
+    [style.transform]="floating() ? null : transform()"
+    [attr.role]="interactive() ? 'button' : null"
+    [attr.tabindex]="interactive() ? 0 : null"
+    [attr.aria-label]="interactive() ? (flipped() ? 'Show card front' : 'Flip card to see the back') : null"
+    (pointermove)="tilt($event)"
+    (pointerleave)="resetTilt()"
+    (click)="flip()"
+    (keydown.enter)="flip($event)"
+    (keydown.space)="flip($event)"
+  >
+    <div class="face front">
+      <shared-doc-card
+        [doc]="doc()"
+        [fallbackName]="fallbackName()"
+        size="big"
+      ></shared-doc-card>
+    </div>
+    <div class="face back">
+      <div class="stripe"></div>
+      <div class="back-row">
+        <div>
+          <div class="eyebrow">{{ eyebrow() }}</div>
+          <div class="back-title">{{ title() }}</div>
+          <div class="sig">{{ signature() }}</div>
+        </div>
+        <div class="qr" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</div>

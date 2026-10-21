@@ -13,7 +13,7 @@ module.exports = {
     ],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(.*\\.mjs$|@ionic/angular|@ionic/core|@stencil/core|ionicons))',
+    'node_modules/(?!(.*\\.mjs$|@ionic/angular|@ionic/core|@stencil/core|ionicons|dexie))',
   ],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',

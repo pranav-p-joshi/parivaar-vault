@@ -1,0 +1,127 @@
+.fetchbox {
+  background: var(--pv-surface);
+  border-radius: 14px;
+  padding: 20px 16px;
+  box-shadow: var(--pv-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  text-align: center;
+}
+
+.fetch-title {
+  font-size: 16px;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 300px;
+  text-align: left;
+}
+
+.step {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 14px;
+  color: var(--pv-muted);
+
+  .dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--pv-line);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  &.on {
+    color: var(--pv-fg);
+    .dot {
+      border-color: var(--pv-saffron);
+      animation: pv-pulse 1s infinite;
+    }
+  }
+  &.done {
+    color: var(--pv-fg);
+    .dot {
+      background: var(--pv-green);
+      border-color: var(--pv-green);
+      color: #fff;
+    }
+  }
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--pv-muted);
+  text-align: center;
+  margin: -6px 0 0;
+}
+
+.verified {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--pv-ok-bg);
+  color: var(--pv-ok-fg);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+
+  svg {
+    flex-shrink: 0;
+  }
+  .sub {
+    font-size: 12.5px;
+    font-weight: 500;
+    opacity: 0.85;
+  }
+  &.uploaded {
+    background: var(--pv-surface-2);
+    color: var(--pv-muted);
+  }
+}
+
+.fields {
+  background: var(--pv-surface);
+  border-radius: 14px;
+  box-shadow: var(--pv-shadow);
+  overflow: hidden;
+
+  ion-button {
+    margin: 0;
+    --padding-start: 6px;
+    --padding-end: 6px;
+    min-height: 36px;
+  }
+}
+
+.empty-fields {
+  padding: 16px;
+}
+
+.confirm {
+  background: var(--pv-surface);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--pv-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step.on .dot {
+    animation: none;
+  }
+}

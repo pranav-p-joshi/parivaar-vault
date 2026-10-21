@@ -1,0 +1,85 @@
+<ion-content [fullscreen]="true" class="who-content">
+  <div class="wrap">
+    <h1 class="pv-animate-in">{{ title() }}</h1>
+    <p class="lead pv-animate-in" style="--pv-delay: 60ms">
+      Pick a family member to see and manage their documents.
+    </p>
+
+    <div class="who pv-stagger" role="list">
+      @for (member of members.members(); track member.id) {
+      <button
+        type="button"
+        class="who-card"
+        role="listitem"
+        (click)="pick(member.id)"
+      >
+        <span class="av" [style.background]="members.colorOf(member)"
+          >{{ initials(member.name) }}</span
+        >
+        <span class="nm">{{ member.name.split(' ')[0] }}</span>
+        <span class="rel">{{ member.relation }}</span>
+      </button>
+      }
+      <button
+        type="button"
+        class="who-card add"
+        role="listitem"
+        (click)="adding.set(true)"
+      >
+        <span class="av">+</span>
+        <span class="nm">Add member</span>
+        <span class="rel">&nbsp;</span>
+      </button>
+    </div>
+
+    @if (adding()) {
+    <form
+      class="panel pv-animate-in"
+      (submit)="$event.preventDefault(); addAndContinue()"
+    >
+      <div class="pv-eyebrow">New member</div>
+      <div class="pv-grid2">
+        <ion-input
+          label="Full name"
+          labelPlacement="stacked"
+          fill="outline"
+          placeholder="e.g. Sunita Joshi"
+          [ngModel]="name()"
+          (ngModelChange)="name.set($event)"
+          name="name"
+          autocapitalize="words"
+          required
+        ></ion-input>
+        <ion-select
+          label="Relation"
+          labelPlacement="stacked"
+          fill="outline"
+          interface="popover"
+          [ngModel]="relation()"
+          (ngModelChange)="relation.set($event)"
+          name="relation"
+        >
+          @for (r of relations; track r) {
+          <ion-select-option [value]="r">{{ r }}</ion-select-option>
+          }
+        </ion-select>
+      </div>
+      <div class="pv-actions">
+        <ion-button
+          type="submit"
+          class="pv-btn"
+          [disabled]="!name().trim() || saving()"
+          >Add &amp; continue</ion-button
+        >
+        <ion-button type="button" class="pv-btn-sec" (click)="adding.set(false)"
+          >Cancel</ion-button
+        >
+      </div>
+    </form>
+    }
+
+    <p class="foot">
+      Your documents never leave this phone unless you share them.
+    </p>
+  </div>
+</ion-content>

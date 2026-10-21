@@ -4,12 +4,31 @@ An [Nx](https://nx.dev) monorepo containing Angular applications and shared libr
 
 ## Projects
 
-| Project          | Path                  | Type        | Description                                              |
-| ---------------- | --------------------- | ----------- | -------------------------------------------------------- |
-| `parivaar-vault` | `apps/parivaar-vault` | Ionic app   | "Parivaar Vault" mobile app: Angular + Ionic + Capacitor |
-| `shared-ui`      | `libs/shared/ui`      | Angular lib | Shared UI components, imported as `@pranav/shared-ui`    |
+| Project                | Path                                    | Type        | Description                                                                                 |
+| ---------------------- | --------------------------------------- | ----------- | ------------------------------------------------------------------------------------------- |
+| `parivaar-vault`       | `apps/parivaar-vault`                   | Ionic app   | App shell (mobile-only, phone-width column with bottom tabs), routing, theme, bundled fonts |
+| `pv-feature-lock`      | `libs/parivaar-vault/feature-lock`      | Angular lib | Sign in / create account and the member picker                                              |
+| `pv-feature-home`      | `libs/parivaar-vault/feature-home`      | Angular lib | Member hero with actions, chips, Issued and Uploaded document lists                         |
+| `pv-feature-documents` | `libs/parivaar-vault/feature-documents` | Angular lib | Document detail (fetch sequence, 3D card, fields) and the add/scan/review flow              |
+| `pv-feature-members`   | `libs/parivaar-vault/feature-members`   | Angular lib | Family members list, add and edit                                                           |
+| `pv-feature-settings`  | `libs/parivaar-vault/feature-settings`  | Angular lib | Account, password, auto-lock, DigiLocker, theme, backup/restore, samples                    |
+| `pv-data-access`       | `libs/parivaar-vault/data-access`       | Angular lib | Encryption, lock, IndexedDB storage, stores, backup, DigiLocker API + mock, sample data     |
+| `pv-ocr`               | `libs/parivaar-vault/ocr`               | TS lib      | On-device OCR (ML Kit native, Tesseract.js web) and per-type field extractors               |
+| `shared-models`        | `libs/shared/models`                    | TS lib      | Domain types and the DocTypeRegistry (`@pranav/shared-models`)                              |
+| `shared-util`          | `libs/shared/util`                      | TS lib      | Dates (dd/mm/yyyy aware), validators incl. Verhoeff, file helpers                           |
+| `shared-ui`            | `libs/shared/ui`                        | Angular lib | DocCard skins, 3D card, doc row, pill, field row, avatar, mask pipe                         |
 
 Run `npx nx graph` to see how the projects depend on each other.
+
+## How the app works
+
+- **Plan and prototype**: `docs/PARIVAAR_VAULT_PLAN.md` holds the product plan with milestone status; the visual prototype it references is linked there.
+- **Registry-driven**: everything a document type implies (card skin, ordered fields, number mask, expiry field, validation pattern) lives in `DOC_TYPE_REGISTRY`. UI, OCR extractors and the DigiLocker parsers read from it.
+- **Issued vs uploaded**: issued documents come from DigiLocker (currently a mock behind the `DigiLockerApi` interface) and show a three-step fetch sequence the first time they are opened in a session. Uploaded documents are scanned on-device: ML Kit Text Recognition on Android/iOS, Tesseract.js on the web, then per-type regex and label-proximity extractors fill the fields for review.
+- **Account and security**: sign-up and sign-in go through Supabase Auth (mobile or email + password; see `supabase/README.md` for setup and the SQL migration). The family account (family name, head, +91 mobile, optional email) is kept in Supabase `profiles` and locally. The password is never stored: a PBKDF2-SHA256 key (310k iterations) wraps a random AES-256-GCM data key, so a wrong password simply cannot decrypt. The wrapped key is mirrored to the user-scoped `vault_keys` table so a second device can unlock the same vault; Supabase never receives documents. With no Supabase URL and key in `apps/parivaar-vault/src/environments/`, the app runs device-only. Five failed local sign-ins start a growing back-off. Every file is encrypted before it is written to IndexedDB, the key only lives in memory while signed in, and the vault re-locks after a configurable time in the background. After sign-in a member picker scopes Home to one family member.
+- **Storage**: IndexedDB via Dexie works in the browser and inside the Capacitor WebView, so one data layer serves web, Android and iOS.
+- **Backups**: Settings exports a JSON file with the encrypted files and the wrapped key. Restoring asks for the PIN that was active when the backup was made.
+- **Design**: dark-first tokens from the prototype (ink blues, saffron, gold, mint; Baloo 2 / Mukta / JetBrains Mono bundled via @fontsource) live in `apps/parivaar-vault/src/theme/`. Light mode follows the system preference or the Appearance setting. The layout targets the mobile viewport only. `design-system/parivaar-vault/MASTER.md` is the earlier UX guidance from the ui-ux-pro-max skill.
 
 ## Everyday commands
 

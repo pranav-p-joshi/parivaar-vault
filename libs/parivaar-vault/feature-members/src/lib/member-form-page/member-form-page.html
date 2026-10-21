@@ -1,0 +1,82 @@
+<ion-header class="ion-no-border pv-topbar">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/family"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit() ? 'Edit member' : 'New family member' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="save()"
+        [disabled]="form.invalid || saving()"
+        [strong]="true"
+        >Save</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="tricolor"></div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form class="pv-page" [formGroup]="form" (ngSubmit)="save()">
+    <section class="pv-form pv-animate-in">
+      <ion-input
+        label="Full name"
+        labelPlacement="stacked"
+        fill="outline"
+        placeholder="e.g. Sunita Joshi"
+        formControlName="name"
+        autocapitalize="words"
+        errorText="Name is required"
+        [class.ion-invalid]="form.controls.name.invalid"
+        [class.ion-touched]="form.controls.name.touched"
+      ></ion-input>
+
+      <ion-select
+        label="Relation to you"
+        labelPlacement="stacked"
+        fill="outline"
+        interface="popover"
+        formControlName="relation"
+      >
+        @for (relation of relations; track relation) {
+        <ion-select-option [value]="relation">{{ relation }}</ion-select-option>
+        }
+      </ion-select>
+
+      <ion-input
+        label="Date of birth"
+        labelPlacement="stacked"
+        fill="outline"
+        type="date"
+        formControlName="dateOfBirth"
+        helperText="Used to pre-fill scanned documents"
+      ></ion-input>
+
+      <ion-textarea
+        label="Notes"
+        labelPlacement="stacked"
+        fill="outline"
+        placeholder="Blood group, allergies, anything useful"
+        [autoGrow]="true"
+        rows="3"
+        formControlName="notes"
+      ></ion-textarea>
+    </section>
+
+    <ion-button
+      expand="block"
+      type="submit"
+      class="pv-btn"
+      [disabled]="form.invalid || saving()"
+    >
+      {{ isEdit() ? 'Save changes' : 'Add member' }}
+    </ion-button>
+
+    @if (isEdit()) {
+    <ion-button expand="block" class="pv-btn-danger" (click)="confirmDelete()">
+      <ion-icon slot="start" name="trash-outline"></ion-icon>
+      Remove member and {{ documentCount() }} document(s)
+    </ion-button>
+    }
+  </form>
+</ion-content>

@@ -1,23 +1,248 @@
-/* Global styles for Parivaar Vault */
-
-/* App theme (Sass @use rules must come before any @import) */
+/* Global styles for Parivaar Vault. Ionic base CSS and fonts load from project.json before this file. */
 @use './theme/variables';
+@use './theme/animations';
 
-/* Core CSS required for Ionic components to work properly */
-@import '@ionic/angular/css/core.css';
+html {
+  -webkit-text-size-adjust: 100%;
+}
 
-/* Basic CSS for apps built with Ionic */
-@import '@ionic/angular/css/normalize.css';
-@import '@ionic/angular/css/structure.css';
-@import '@ionic/angular/css/typography.css';
-@import '@ionic/angular/css/display.css';
+body {
+  font-family: var(--pv-body);
+  font-size: 15px;
+  line-height: 1.45;
+  background: var(--pv-bg);
+}
 
-/* Optional CSS utils that can be commented out */
-@import '@ionic/angular/css/padding.css';
-@import '@ionic/angular/css/float-elements.css';
-@import '@ionic/angular/css/text-alignment.css';
-@import '@ionic/angular/css/text-transformation.css';
-@import '@ionic/angular/css/flex-utils.css';
+h1,
+h2,
+h3 {
+  font-family: var(--pv-display);
+}
 
-/* Ionic dark mode (follows the system preference) */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* Mobile-only layout: one phone-width column, centred on larger screens. */
+ion-app {
+  max-width: 480px;
+  margin-inline: auto;
+  background: var(--pv-bg);
+  @media (min-width: 481px) {
+    box-shadow:
+      0 0 0 1px var(--pv-line),
+      0 20px 60px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Navy top bar with the tricolour rule beneath it. */
+.pv-topbar {
+  ion-toolbar {
+    --background: linear-gradient(135deg, var(--pv-navy), var(--pv-navy-2));
+    --color: var(--pv-on-navy);
+    --border-width: 0;
+    --min-height: 56px;
+    --padding-top: 6px;
+    --padding-bottom: 6px;
+  }
+  ion-back-button,
+  ion-button {
+    --color: var(--pv-on-navy);
+  }
+  ion-title {
+    font-family: var(--pv-body);
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .brand {
+    font-family: var(--pv-display);
+    font-weight: 800;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: 0.2px;
+    padding-inline-start: 16px;
+    min-width: 0;
+    small {
+      display: block;
+      font-family: var(--pv-body);
+      font-weight: 500;
+      font-size: 11px;
+      opacity: 0.8;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  .tricolor {
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      var(--pv-saffron) 0 33%,
+      #fff 33% 66%,
+      var(--pv-green) 66%
+    );
+  }
+}
+
+.pv-page {
+  padding: 16px 16px calc(96px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pv-card {
+  background: var(--pv-surface);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--pv-shadow);
+}
+
+.pv-empty {
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--pv-muted);
+  background: var(--pv-surface);
+  border: 1.5px dashed var(--pv-line);
+  border-radius: 14px;
+  font-size: 14px;
+}
+
+.pv-note {
+  font-size: 12.5px;
+  color: var(--pv-muted);
+  text-align: center;
+  margin: 0;
+}
+
+.pv-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--pv-muted);
+  font-weight: 700;
+}
+
+.pv-doclist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Buttons */
+ion-button {
+  --border-radius: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 700;
+  font-family: var(--pv-body);
+  min-height: 46px;
+}
+ion-button.pv-btn {
+  --background: linear-gradient(135deg, var(--pv-navy-2), var(--pv-navy));
+  --background-hover: var(--pv-navy-2);
+  --background-activated: var(--pv-navy-2);
+  --color: var(--pv-on-navy);
+  --box-shadow: 0 6px 18px -8px rgba(31, 47, 110, 0.9);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --border-width: 1px;
+  --border-style: solid;
+  margin: 0;
+}
+ion-button.pv-btn-sec {
+  --background: var(--pv-surface-2);
+  --color: var(--pv-fg);
+  --border-color: var(--pv-line);
+  --border-width: 1.5px;
+  --border-style: solid;
+  --box-shadow: none;
+  margin: 0;
+}
+ion-button.pv-btn-danger {
+  --background: transparent;
+  --color: var(--pv-red);
+  --border-color: color-mix(in srgb, var(--pv-red) 40%, transparent);
+  --border-width: 1.5px;
+  --border-style: solid;
+  --box-shadow: none;
+  margin: 0;
+}
+.pv-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.pv-ghost {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pv-link);
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--pv-link-bg);
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+  transition: filter 150ms ease;
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
+
+/* Forms */
+.pv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--pv-surface);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--pv-shadow);
+}
+.pv-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  @media (max-width: 360px) {
+    grid-template-columns: 1fr;
+  }
+  .wide {
+    grid-column: 1 / -1;
+  }
+}
+ion-input,
+ion-select,
+ion-textarea {
+  --border-radius: 8px;
+  --border-color: var(--pv-line);
+  --highlight-color-focused: var(--pv-saffron);
+  font-family: var(--pv-body);
+}
+
+/* Saffron FAB */
+ion-fab-button.pv-fab {
+  --background: var(--pv-saffron);
+  --background-activated: #e08844;
+  --background-hover: #ffa45f;
+  --color: #fff;
+  --box-shadow: 0 6px 18px rgba(240, 132, 58, 0.45);
+  width: 54px;
+  height: 54px;
+  font-size: 28px;
+}
+ion-fab[vertical='bottom'] {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 8px);
+}
+
+ion-content {
+  --background: var(--pv-bg);
+}
+ion-tab-bar {
+  --border: 1px solid var(--pv-line);
+}
+ion-tab-button {
+  font-family: var(--pv-body);
+  font-weight: 700;
+  font-size: 11px;
+}
+ion-toast {
+  --border-radius: 999px;
+}

@@ -51,13 +51,26 @@
     "@angular/platform-browser": "~22.1.0",
     "@angular/platform-browser-dynamic": "~22.1.0",
     "@angular/router": "~22.1.0",
+    "@capacitor-mlkit/text-recognition": "^8.2.1",
     "@capacitor/app": "^8.1.2",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/camera": "^8.2.6",
     "@capacitor/core": "^8.5.3",
+    "@capacitor/filesystem": "^8.1.5",
     "@capacitor/haptics": "^8.0.2",
     "@capacitor/keyboard": "^8.0.6",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/preferences": "^8.0.1",
+    "@capacitor/share": "^8.0.3",
     "@capacitor/status-bar": "^8.0.4",
+    "@fontsource/baloo-2": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/mukta": "^5.3.0",
     "@ionic/angular": "^9.0.8",
+    "@supabase/supabase-js": "^2.118.0",
+    "dexie": "^4.4.6",
     "ionicons": "^8.1.0",
-    "rxjs": "~7.8.0"
+    "rxjs": "~7.8.0",
+    "tesseract.js": "^7.0.0"
   }
 }

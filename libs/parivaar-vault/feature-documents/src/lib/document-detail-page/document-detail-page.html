@@ -1,0 +1,201 @@
+<ion-header class="ion-no-border pv-topbar">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title
+      >{{ title() }} · {{ member()?.name?.split(' ')?.[0] ?? '' }}</ion-title
+    >
+    <ion-buttons slot="end">
+      @if (doc(); as d) { @if (d.source === 'uploaded') {
+      <ion-button
+        [routerLink]="['/doc', d.id, 'edit']"
+        aria-label="Edit fields"
+      >
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+      } }
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="tricolor"></div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="pv-page">
+    @if (doc(); as d) { @if (fetching()) {
+    <div class="fetchbox pv-animate-in">
+      <shared-doc-card-3d
+        [doc]="d"
+        [fallbackName]="member()?.name ?? ''"
+        [floating]="true"
+        [interactive]="false"
+      ></shared-doc-card-3d>
+      <div>
+        <strong class="fetch-title">{{ title() }}</strong>
+        <div class="pv-note">{{ member()?.name }}</div>
+      </div>
+      <ol class="steps" aria-live="polite">
+        @for (step of steps(); track step.label) {
+        <li
+          class="step"
+          [class.on]="step.state === 'on'"
+          [class.done]="step.state === 'done'"
+        >
+          <span class="dot">{{ step.state === 'done' ? '✓' : '' }}</span>{{
+          step.label }}
+        </li>
+        }
+      </ol>
+    </div>
+    } @else {
+    <shared-doc-card-3d
+      [doc]="d"
+      [fallbackName]="member()?.name ?? ''"
+      class="pv-animate-in"
+    ></shared-doc-card-3d>
+    <p class="hint">Tap the card to flip · move to tilt</p>
+
+    @if (d.source === 'issued') {
+    <div class="verified pv-animate-in" style="--pv-delay: 60ms">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 2l7 3v6c0 5-3.5 9-7 11-3.5-2-7-6-7-11V5z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+      <div>
+        Issued &amp; digitally signed by {{ d.issuer?.name ?? def()?.issuer }}
+        <div class="sub">
+          {{ fetchedAt() ? 'Fetched just now' : 'Fetched ' +
+          formatDate((d.issuer?.signedAt ?? d.updatedAt).slice(0, 10)) }} ·
+          valid for all KYC purposes
+        </div>
+      </div>
+    </div>
+    } @else {
+    <div class="verified uploaded pv-animate-in" style="--pv-delay: 60ms">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <path d="M14 2v6h6" />
+      </svg>
+      <div>
+        Uploaded by you · fields read from the scan
+        <div class="sub">Added {{ formatDate(d.addedAt.slice(0, 10)) }}</div>
+      </div>
+    </div>
+    } @if (frontFileId(); as fileId) {
+    <pv-file-thumb
+      [fileId]="fileId"
+      alt="Scanned document, front"
+      class="pv-animate-in"
+      style="--pv-delay: 90ms"
+    ></pv-file-thumb>
+    } @if (backFileId(); as fileId) {
+    <pv-file-thumb
+      [fileId]="fileId"
+      alt="Scanned document, back"
+    ></pv-file-thumb>
+    }
+
+    <shared-section-header
+      title="Document details"
+      [count]="member()?.name ?? null"
+    ></shared-section-header>
+    <div class="fields pv-animate-in" style="--pv-delay: 120ms">
+      @for (field of fields(); track field.key) {
+      <shared-field-row
+        [label]="field.key"
+        [value]="field.value"
+        [mono]="field.mono"
+        [lowConfidence]="field.low"
+      >
+        @if (field.isNumber) {
+        <ion-button
+          fill="clear"
+          size="small"
+          (click)="copyNumber()"
+          aria-label="Copy number"
+        >
+          <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+        </ion-button>
+        }
+      </shared-field-row>
+      } @empty {
+      <p class="pv-note empty-fields">No details recorded yet.</p>
+      }
+    </div>
+
+    <div class="pv-actions">
+      <ion-button class="pv-btn" (click)="copyNumber()">
+        <ion-icon slot="start" name="copy-outline"></ion-icon>
+        Copy number
+      </ion-button>
+      <ion-button class="pv-btn-sec" (click)="share()">
+        <ion-icon slot="start" name="share-outline"></ion-icon>
+        Share
+      </ion-button>
+      @if (pdfFileId()) {
+      <ion-button class="pv-btn-sec" (click)="downloadPdf()">
+        <ion-icon slot="start" name="download-outline"></ion-icon>
+        Download PDF
+      </ion-button>
+      } @if (d.source === 'uploaded') {
+      <ion-button class="pv-btn-sec" [routerLink]="['/doc', d.id, 'edit']">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Edit fields
+      </ion-button>
+      }
+    </div>
+
+    @if (!confirmingDelete()) {
+    <ion-button
+      class="pv-btn-danger"
+      expand="block"
+      (click)="confirmingDelete.set(true)"
+    >
+      <ion-icon slot="start" name="trash-outline"></ion-icon>
+      Remove from vault
+    </ion-button>
+    } @else {
+    <div class="confirm pv-animate-in">
+      <strong>Remove {{ title() }} for {{ member()?.name }}?</strong>
+      <div class="pv-actions">
+        <ion-button class="pv-btn-danger" (click)="remove()"
+          >Yes, remove</ion-button
+        >
+        <ion-button class="pv-btn-sec" (click)="confirmingDelete.set(false)"
+          >Keep it</ion-button
+        >
+      </div>
+    </div>
+    } } } @else {
+    <shared-empty-state
+      icon="document-text-outline"
+      title="Document not found"
+      message="It may have been removed."
+    >
+      <ion-button routerLink="/home" class="pv-btn-sec"
+        >Back to home</ion-button
+      >
+    </shared-empty-state>
+    }
+  </div>
+</ion-content>

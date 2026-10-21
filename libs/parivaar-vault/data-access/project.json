@@ -1,0 +1,21 @@
+{
+  "name": "pv-data-access",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/parivaar-vault/data-access/src",
+  "prefix": "pv",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:parivaar-vault"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/parivaar-vault/data-access/jest.config.cts",
+        "tsConfig": "libs/parivaar-vault/data-access/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

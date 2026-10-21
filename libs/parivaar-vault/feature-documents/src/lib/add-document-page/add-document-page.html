@@ -1,0 +1,162 @@
+<ion-header class="ion-no-border pv-topbar">
+  <ion-toolbar>
+    @if (isEdit()) {
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    }
+    <ion-title>{{ isEdit() ? 'Edit fields' : 'Add a document' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" [disabled]="!canSave()" [strong]="true"
+        >Save</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="tricolor"></div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form class="pv-page" (submit)="$event.preventDefault(); save()">
+    @if (members.count() === 0) {
+    <div class="pv-empty">Add a family member first from the Family tab.</div>
+    }
+
+    <section class="pv-form pv-animate-in">
+      <div class="pv-grid2">
+        <ion-select
+          label="Family member"
+          labelPlacement="stacked"
+          fill="outline"
+          interface="popover"
+          placeholder="Choose"
+          [ngModel]="selectedMember()"
+          (ngModelChange)="selectedMember.set($event)"
+          name="member"
+        >
+          @for (member of members.members(); track member.id) {
+          <ion-select-option [value]="member.id"
+            >{{ member.name }} · {{ member.relation }}</ion-select-option
+          >
+          }
+        </ion-select>
+        <ion-select
+          label="Document type"
+          labelPlacement="stacked"
+          fill="outline"
+          interface="popover"
+          [ngModel]="type()"
+          (ngModelChange)="setType($event)"
+          name="type"
+          [disabled]="isEdit()"
+        >
+          @for (t of types; track t.id) {
+          <ion-select-option [value]="t.id">{{ t.name }}</ion-select-option>
+          }
+        </ion-select>
+      </div>
+
+      @if (!isEdit()) {
+      <div class="upload">
+        <strong>Take a photo or choose a file</strong>
+        Front side of the card works best. JPG, PNG or PDF. Text is read on this
+        device only.
+        <div class="capture-row">
+          @if (platform.isNative) {
+          <ion-button class="pv-btn" (click)="capture('camera')">
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            Camera
+          </ion-button>
+          <ion-button class="pv-btn-sec" (click)="capture('photos')">
+            <ion-icon slot="start" name="images-outline"></ion-icon>
+            Photos
+          </ion-button>
+          }
+          <ion-button
+            [class]="platform.isNative ? 'pv-btn-sec' : 'pv-btn'"
+            (click)="capture('files')"
+          >
+            <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+            {{ platform.isNative ? 'Files' : 'Choose file' }}
+          </ion-button>
+        </div>
+      </div>
+
+      @if (front(); as f) {
+      <div class="scan-wrap">
+        @if (f.previewUrl) {
+        <div [class.pv-scan]="phase() === 'scanning'">
+          <img
+            class="imgpreview"
+            [src]="f.previewUrl"
+            alt="Front of the document"
+          />
+        </div>
+        } @else {
+        <div class="pv-empty">PDF attached.</div>
+        }
+        <p class="pv-note">{{ scanNote() }}</p>
+        @if (def().hasBack && !f.isPdf) { @if (back(); as b) { @if
+        (b.previewUrl) {
+        <div [class.pv-scan]="phase() === 'scanning'">
+          <img
+            class="imgpreview"
+            [src]="b.previewUrl"
+            alt="Back of the document"
+          />
+        </div>
+        } } @else {
+        <ion-button
+          class="pv-btn-sec"
+          size="small"
+          (click)="capture(platform.isNative ? 'camera' : 'files', 'back')"
+          [disabled]="phase() === 'scanning'"
+        >
+          <ion-icon slot="start" name="scan-outline"></ion-icon>
+          Add back side (address)
+        </ion-button>
+        } }
+      </div>
+      } }
+    </section>
+
+    <section class="pv-form pv-animate-in" style="--pv-delay: 60ms">
+      <div class="pv-eyebrow">{{ def().name }} details</div>
+      <div class="preview">
+        <shared-doc-card
+          [doc]="previewDoc()"
+          [fallbackName]="members.get(selectedMember())?.name ?? ''"
+          size="big"
+        ></shared-doc-card>
+      </div>
+      <div class="pv-grid2">
+        @for (key of def().fields; track key) {
+        <ion-input
+          [class.wide]="isWide(key)"
+          [class.low]="isLow(key)"
+          [label]="key + (key === def().numberKey ? ' *' : '')"
+          labelPlacement="stacked"
+          fill="outline"
+          [value]="values()[key] ?? ''"
+          (ionInput)="setValue(key, $event.detail.value)"
+          [name]="key"
+          [helperText]="isLow(key) ? 'Low confidence, please check' : ''"
+          [errorText]="key === def().numberKey ? numberError() : ''"
+          [class.ion-invalid]="key === def().numberKey && !!numberError()"
+          [class.ion-touched]="key === def().numberKey && !!numberError()"
+          [autocapitalize]="key === def().numberKey ? 'characters' : 'words'"
+        ></ion-input>
+        }
+      </div>
+    </section>
+
+    <ion-button
+      expand="block"
+      type="submit"
+      class="pv-btn"
+      [disabled]="!canSave()"
+    >
+      {{ saving() ? 'Encrypting & saving…' : phase() === 'scanning' ? 'Reading
+      the scan…' : isEdit() ? 'Save changes' : 'Save to vault' }}
+    </ion-button>
+  </form>
+</ion-content>

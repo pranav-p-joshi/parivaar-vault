@@ -1,0 +1,163 @@
+<ion-header class="ion-no-border pv-topbar">
+  <ion-toolbar>
+    <div class="brand">
+      Parivaar Vault<small
+        >{{ familyName() || 'परिवार · family documents' }}</small
+      >
+    </div>
+    @if (selected(); as m) {
+    <button
+      type="button"
+      slot="end"
+      class="avbtn"
+      [style.background]="members.colorOf(m)"
+      (click)="switchMember()"
+      aria-label="Switch family member"
+      title="Switch member"
+    >
+      {{ initials(m.name) }}
+    </button>
+    }
+  </ion-toolbar>
+  <div class="tricolor"></div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="pv-page">
+    @if (isEmpty()) {
+    <shared-empty-state
+      icon="shield-checkmark-outline"
+      title="Your vault is empty"
+      message="Add the people in your family, then their Aadhaar, PAN, passport and any other papers."
+      class="pv-animate-in"
+    >
+      <div class="empty-actions">
+        <ion-button routerLink="/family" class="pv-btn">
+          <ion-icon slot="start" name="person-add-outline"></ion-icon>
+          Add family member
+        </ion-button>
+        <ion-button class="pv-btn-sec" (click)="loadSamples()">
+          <ion-icon slot="start" name="sparkles-outline"></ion-icon>
+          Explore with a sample family
+        </ion-button>
+      </div>
+    </shared-empty-state>
+    } @else { @if (selected(); as m) {
+    <section class="hero pv-animate-in">
+      <div class="top">
+        <span class="av" [style.background]="members.colorOf(m)"
+          >{{ initials(m.name) }}</span
+        >
+        <div class="who">
+          <div class="nm">{{ m.name }}</div>
+          <div class="rel">
+            {{ m.relation }}{{ familyName() ? ' · ' + familyName() : '' }}
+          </div>
+        </div>
+        <div class="stats">
+          <div><b>{{ mine().length }}</b><span>docs</span></div>
+          <div><b>{{ expiring() }}</b><span>expiring</span></div>
+        </div>
+      </div>
+      <div class="acts">
+        <button type="button" routerLink="/add">
+          <ion-icon name="documents-outline" aria-hidden="true"></ion-icon>Add
+          doc
+        </button>
+        <button type="button" (click)="shareAll()">
+          <ion-icon name="share-social-outline" aria-hidden="true"></ion-icon
+          >Share all
+        </button>
+        <button type="button" (click)="editMember()">
+          <ion-icon name="create-outline" aria-hidden="true"></ion-icon>Edit
+          member
+        </button>
+        <button type="button" (click)="switchMember()">
+          <ion-icon name="swap-horizontal-outline" aria-hidden="true"></ion-icon
+          >Switch
+        </button>
+      </div>
+    </section>
+    }
+
+    <div class="members" role="group" aria-label="Family members">
+      @for (member of members.members(); track member.id) {
+      <button
+        type="button"
+        class="chip"
+        [attr.aria-pressed]="member.id === members.selectedId()"
+        (click)="select(member.id)"
+      >
+        <span class="av" [style.background]="members.colorOf(member)"
+          >{{ initials(member.name) }}</span
+        >
+        {{ member.name.split(' ')[0] }}
+      </button>
+      }
+      <a class="chip add" routerLink="/family">
+        <span class="av plus">+</span>
+        Add
+      </a>
+    </div>
+
+    <shared-section-header
+      title="Issued documents"
+      [count]="plural(issued().length)"
+    ></shared-section-header>
+    @if (issued().length) {
+    <div class="pv-doclist pv-rise">
+      @for (doc of issued(); track doc.id) {
+      <shared-doc-row
+        [doc]="doc"
+        [memberName]="selected()?.name ?? ''"
+        [link]="['/doc', doc.id]"
+      ></shared-doc-row>
+      }
+    </div>
+    } @else {
+    <div class="pv-empty">
+      No issued documents yet for {{ firstName() }}. Link DigiLocker in Settings
+      to fetch them.
+    </div>
+    }
+
+    <shared-section-header
+      title="Uploaded documents"
+      [count]="plural(uploaded().length)"
+    ></shared-section-header>
+    @if (uploaded().length) {
+    <div class="pv-doclist pv-rise">
+      @for (doc of uploaded(); track doc.id) {
+      <shared-doc-row
+        [doc]="doc"
+        [memberName]="selected()?.name ?? ''"
+        [link]="['/doc', doc.id]"
+      ></shared-doc-row>
+      }
+    </div>
+    } @else {
+    <div class="pv-empty">
+      Nothing uploaded yet. Tap + to add a certificate, policy or any other
+      paper.
+    </div>
+    } @if (samples.hasSamples()) {
+    <p class="pv-note">
+      Sample records are shown as examples. Remove them from Settings when you
+      add real documents.
+    </p>
+    } @else if (noDocuments()) {
+    <ion-button class="pv-btn-sec" size="small" (click)="loadSamples()">
+      <ion-icon slot="start" name="sparkles-outline"></ion-icon>
+      Explore with a sample family
+    </ion-button>
+    } }
+  </div>
+
+  @if (!isEmpty()) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/add" class="pv-fab" aria-label="Add document">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
+</ion-content>

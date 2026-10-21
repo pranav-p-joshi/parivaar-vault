@@ -1,10 +1,188 @@
-/* Ionic theme variables for Parivaar Vault.
-   See https://ionicframework.com/docs/theming/ for the full list. */
+/* Parivaar Vault theme, dark-first (deep ink blues, saffron accent, gold for signatures,
+   mint for verified states). Light palette applies when the system asks for light,
+   or when SettingsService sets data-theme="light". */
+
+@mixin light-tokens {
+  --pv-bg: #f3f4f9;
+  --pv-surface: #ffffff;
+  --pv-surface-2: #eceff7;
+  --pv-fg: #141a2e;
+  --pv-muted: #5d6580;
+  --pv-line: #d9deec;
+  --pv-navy: #1b2a6b;
+  --pv-navy-2: #2a3d96;
+  --pv-saffron: #f0843a;
+  --pv-gold: #c9992a;
+  --pv-green: #1f8a4c;
+  --pv-red: #c9302c;
+  --pv-ok-bg: #e3f6ea;
+  --pv-ok-fg: #146b3a;
+  --pv-link: #2a3d96;
+  --pv-link-bg: #e8ecfa;
+  --pv-shadow: 0 2px 10px rgba(27, 42, 107, 0.09);
+
+  --ion-color-primary: #1b2a6b;
+  --ion-color-primary-rgb: 27, 42, 107;
+  --ion-color-primary-shade: #18255e;
+  --ion-color-primary-tint: #2a3d96;
+  --ion-color-tertiary: #f0843a;
+  --ion-color-tertiary-rgb: 240, 132, 58;
+  --ion-color-tertiary-shade: #d37433;
+  --ion-color-tertiary-tint: #f2904e;
+  --ion-color-success: #1f8a4c;
+  --ion-color-success-rgb: 31, 138, 76;
+  --ion-color-success-shade: #1b7943;
+  --ion-color-success-tint: #35965e;
+  --ion-color-danger: #c9302c;
+  --ion-color-danger-rgb: 201, 48, 44;
+  --ion-color-danger-shade: #b12a27;
+  --ion-color-danger-tint: #ce4541;
+  --ion-color-medium: #5d6580;
+  --ion-color-medium-rgb: 93, 101, 128;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #525971;
+  --ion-color-medium-tint: #6d748d;
+  --ion-color-light: #eceff7;
+  --ion-color-light-rgb: 236, 239, 247;
+  --ion-color-light-contrast: #141a2e;
+  --ion-color-light-contrast-rgb: 20, 26, 46;
+  --ion-color-light-shade: #d0d2d9;
+  --ion-color-light-tint: #eef1f8;
+  --ion-color-dark: #141a2e;
+  --ion-color-dark-rgb: 20, 26, 46;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #121728;
+  --ion-color-dark-tint: #2c3143;
+
+  --ion-background-color: #f3f4f9;
+  --ion-background-color-rgb: 243, 244, 249;
+  --ion-text-color: #141a2e;
+  --ion-text-color-rgb: 20, 26, 46;
+  --ion-item-background: #ffffff;
+  --ion-card-background: #ffffff;
+  --ion-toolbar-background: #1b2a6b;
+  --ion-toolbar-color: #ffffff;
+  --ion-tab-bar-background: #ffffff;
+  --ion-tab-bar-color: #5d6580;
+  --ion-tab-bar-color-selected: #f0843a;
+  --ion-border-color: #d9deec;
+  color-scheme: light;
+}
+
 :root {
-  --ion-color-primary: #3b5bdb;
-  --ion-color-primary-rgb: 59, 91, 219;
+  --pv-display: 'Baloo 2', system-ui, sans-serif;
+  --pv-body: 'Mukta', system-ui, sans-serif;
+  --pv-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --ion-font-family: var(--pv-body);
+
+  /* Dark palette (default) */
+  --pv-bg: #0a0e1c;
+  --pv-surface: #131a2d;
+  --pv-surface-2: #1c2440;
+  --pv-fg: #f1f3fb;
+  --pv-muted: #97a0c0;
+  --pv-line: #283152;
+  --pv-navy: #101a3d;
+  --pv-navy-2: #1f2f6e;
+  --pv-on-navy: #ffffff;
+  --pv-saffron: #ff9a4d;
+  --pv-gold: #e6b84a;
+  --pv-green: #34c77b;
+  --pv-red: #ff7272;
+  --pv-ok-bg: #12301f;
+  --pv-ok-fg: #86e5ad;
+  --pv-link: #a9b8ff;
+  --pv-link-bg: #232c52;
+  --pv-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --pv-shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
+
+  --ion-color-primary: #1f2f6e;
+  --ion-color-primary-rgb: 31, 47, 110;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3450c1;
-  --ion-color-primary-tint: #4f6bdf;
+  --ion-color-primary-shade: #1b2961;
+  --ion-color-primary-tint: #35447d;
+
+  --ion-color-secondary: #2a3d96;
+  --ion-color-secondary-rgb: 42, 61, 150;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #253684;
+  --ion-color-secondary-tint: #3f50a1;
+
+  --ion-color-tertiary: #ff9a4d;
+  --ion-color-tertiary-rgb: 255, 154, 77;
+  --ion-color-tertiary-contrast: #1a1a1a;
+  --ion-color-tertiary-contrast-rgb: 26, 26, 26;
+  --ion-color-tertiary-shade: #e08844;
+  --ion-color-tertiary-tint: #ffa45f;
+
+  --ion-color-success: #34c77b;
+  --ion-color-success-rgb: 52, 199, 123;
+  --ion-color-success-contrast: #0a0e1c;
+  --ion-color-success-contrast-rgb: 10, 14, 28;
+  --ion-color-success-shade: #2eaf6c;
+  --ion-color-success-tint: #48cd88;
+
+  --ion-color-warning: #e6b84a;
+  --ion-color-warning-rgb: 230, 184, 74;
+  --ion-color-warning-contrast: #0a0e1c;
+  --ion-color-warning-contrast-rgb: 10, 14, 28;
+  --ion-color-warning-shade: #caa241;
+  --ion-color-warning-tint: #e9bf5c;
+
+  --ion-color-danger: #ff7272;
+  --ion-color-danger-rgb: 255, 114, 114;
+  --ion-color-danger-contrast: #0a0e1c;
+  --ion-color-danger-contrast-rgb: 10, 14, 28;
+  --ion-color-danger-shade: #e06464;
+  --ion-color-danger-tint: #ff8080;
+
+  --ion-color-medium: #97a0c0;
+  --ion-color-medium-rgb: 151, 160, 192;
+  --ion-color-medium-contrast: #0a0e1c;
+  --ion-color-medium-contrast-rgb: 10, 14, 28;
+  --ion-color-medium-shade: #858da9;
+  --ion-color-medium-tint: #a1aac6;
+
+  --ion-color-light: #1c2440;
+  --ion-color-light-rgb: 28, 36, 64;
+  --ion-color-light-contrast: #f1f3fb;
+  --ion-color-light-contrast-rgb: 241, 243, 251;
+  --ion-color-light-shade: #192038;
+  --ion-color-light-tint: #333a53;
+
+  --ion-color-dark: #f1f3fb;
+  --ion-color-dark-rgb: 241, 243, 251;
+  --ion-color-dark-contrast: #0a0e1c;
+  --ion-color-dark-contrast-rgb: 10, 14, 28;
+  --ion-color-dark-shade: #d4d6dd;
+  --ion-color-dark-tint: #f2f4fb;
+
+  --ion-background-color: #0a0e1c;
+  --ion-background-color-rgb: 10, 14, 28;
+  --ion-text-color: #f1f3fb;
+  --ion-text-color-rgb: 241, 243, 251;
+  --ion-item-background: #131a2d;
+  --ion-card-background: #131a2d;
+  --ion-toolbar-background: #101a3d;
+  --ion-toolbar-color: #ffffff;
+  --ion-tab-bar-background: #131a2d;
+  --ion-tab-bar-color: #97a0c0;
+  --ion-tab-bar-color-selected: #ff9a4d;
+  --ion-border-color: #283152;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    @include light-tokens;
+  }
+}
+
+:root[data-theme='light'] {
+  @include light-tokens;
 }

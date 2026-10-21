@@ -16,7 +16,28 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@pranav/shared-ui": ["./libs/shared/ui/src/index.ts"]
+      "@pranav/shared-ui": ["./libs/shared/ui/src/index.ts"],
+      "@pranav/shared-models": ["./libs/shared/models/src/index.ts"],
+      "@pranav/shared-util": ["./libs/shared/util/src/index.ts"],
+      "@pranav/pv-data-access": [
+        "./libs/parivaar-vault/data-access/src/index.ts"
+      ],
+      "@pranav/pv-feature-lock": [
+        "./libs/parivaar-vault/feature-lock/src/index.ts"
+      ],
+      "@pranav/pv-feature-members": [
+        "./libs/parivaar-vault/feature-members/src/index.ts"
+      ],
+      "@pranav/pv-feature-documents": [
+        "./libs/parivaar-vault/feature-documents/src/index.ts"
+      ],
+      "@pranav/pv-feature-home": [
+        "./libs/parivaar-vault/feature-home/src/index.ts"
+      ],
+      "@pranav/pv-feature-settings": [
+        "./libs/parivaar-vault/feature-settings/src/index.ts"
+      ],
+      "@pranav/pv-ocr": ["./libs/parivaar-vault/ocr/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
