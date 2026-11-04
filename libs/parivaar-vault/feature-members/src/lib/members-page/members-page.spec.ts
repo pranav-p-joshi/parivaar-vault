@@ -6,9 +6,9 @@ import {
   FilesRepository,
   MembersRepository,
   MembersStore,
-  SAMPLE_MEMBERS,
 } from '@pranav/pv-data-access';
 import { MembersPage } from './members-page';
+import { testMembers } from './test-fixtures';
 
 describe('MembersPage', () => {
   let fixture: ComponentFixture<MembersPage>;
@@ -21,7 +21,7 @@ describe('MembersPage', () => {
         provideIonicAngular(),
         {
           provide: MembersRepository,
-          useValue: { all: () => Promise.resolve(SAMPLE_MEMBERS) },
+          useValue: { all: () => Promise.resolve(testMembers) },
         },
         {
           provide: DocumentsRepository,

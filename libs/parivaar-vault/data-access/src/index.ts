@@ -14,8 +14,6 @@ export * from './lib/backup/backup.service';
 export * from './lib/reminders/reminder.service';
 export * from './lib/settings/settings.service';
 export * from './lib/guards/vault-unlocked.guard';
-export * from './lib/sample/sample-data';
-export * from './lib/sample/sample-data.service';
 export * from './lib/digilocker/digilocker-api';
 export * from './lib/digilocker/mock-digilocker-api';
 export * from './lib/digilocker/digilocker.service';

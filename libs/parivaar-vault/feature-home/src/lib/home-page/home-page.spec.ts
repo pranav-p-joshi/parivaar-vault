@@ -8,11 +8,10 @@ import {
   FilesRepository,
   MembersRepository,
   MembersStore,
-  SAMPLE_DOCUMENTS,
-  SAMPLE_MEMBERS,
   VaultLockService,
 } from '@pranav/pv-data-access';
 import { HomePage } from './home-page';
+import { testDocuments, testMembers } from './test-fixtures';
 
 describe('HomePage', () => {
   let fixture: ComponentFixture<HomePage>;
@@ -25,11 +24,11 @@ describe('HomePage', () => {
         provideIonicAngular(),
         {
           provide: MembersRepository,
-          useValue: { all: () => Promise.resolve(SAMPLE_MEMBERS) },
+          useValue: { all: () => Promise.resolve(testMembers) },
         },
         {
           provide: DocumentsRepository,
-          useValue: { all: () => Promise.resolve(SAMPLE_DOCUMENTS) },
+          useValue: { all: () => Promise.resolve(testDocuments) },
         },
         { provide: FilesRepository, useValue: {} },
         {

@@ -7,10 +7,9 @@ import {
   FilesRepository,
   MembersRepository,
   MembersStore,
-  SAMPLE_DOCUMENTS,
-  SAMPLE_MEMBERS,
 } from '@pranav/pv-data-access';
 import { DocumentDetailPage } from './document-detail-page';
+import { testDocuments, testMembers } from './test-fixtures';
 
 describe('DocumentDetailPage', () => {
   let fixture: ComponentFixture<DocumentDetailPage>;
@@ -23,11 +22,11 @@ describe('DocumentDetailPage', () => {
         provideIonicAngular(),
         {
           provide: MembersRepository,
-          useValue: { all: () => Promise.resolve(SAMPLE_MEMBERS) },
+          useValue: { all: () => Promise.resolve(testMembers) },
         },
         {
           provide: DocumentsRepository,
-          useValue: { all: () => Promise.resolve(SAMPLE_DOCUMENTS) },
+          useValue: { all: () => Promise.resolve(testDocuments) },
         },
         {
           provide: FilesRepository,
@@ -35,7 +34,7 @@ describe('DocumentDetailPage', () => {
         },
         {
           provide: ActivatedRoute,
-          useValue: { snapshot: { paramMap: new Map([['id', 'sample-d8']]) } },
+          useValue: { snapshot: { paramMap: new Map([['id', 'd8']]) } },
         },
       ],
     }).compileComponents();

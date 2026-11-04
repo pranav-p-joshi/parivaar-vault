@@ -29,7 +29,6 @@ import {
   DocumentsStore,
   MembersStore,
   PlatformService,
-  SampleDataService,
   SettingsService,
   VaultAccountService,
   VaultLockService,
@@ -46,7 +45,6 @@ import {
   linkOutline,
   logOutOutline,
   shieldCheckmarkOutline,
-  sparklesOutline,
   timerOutline,
   trashOutline,
 } from 'ionicons/icons';
@@ -93,13 +91,12 @@ export class SettingsPage {
   protected readonly settings = inject(SettingsService);
   protected readonly members = inject(MembersStore);
   protected readonly documents = inject(DocumentsStore);
-  protected readonly samples = inject(SampleDataService);
   protected readonly digilocker = inject(DigiLockerService);
 
   protected readonly autoLockOptions = AUTO_LOCK_OPTIONS;
-  protected readonly busy = signal<
-    'export' | 'import' | 'digilocker' | 'samples' | null
-  >(null);
+  protected readonly busy = signal<'export' | 'import' | 'digilocker' | null>(
+    null,
+  );
   protected readonly theme = computed(() => this.settings.settings().theme);
   protected readonly autoLock = computed(
     () => this.settings.settings().autoLockMinutes,
@@ -114,7 +111,6 @@ export class SettingsPage {
       cloudDownloadOutline,
       cloudUploadOutline,
       linkOutline,
-      sparklesOutline,
       trashOutline,
       alertCircleOutline,
       shieldCheckmarkOutline,
@@ -381,22 +377,7 @@ export class SettingsPage {
     }
   }
 
-  // ---- Samples & danger zone ----
-
-  protected async toggleSamples(): Promise<void> {
-    this.busy.set('samples');
-    try {
-      if (this.samples.hasSamples()) {
-        await this.samples.remove();
-        await this.notify('Sample family removed.', 'success');
-      } else {
-        await this.samples.load();
-        await this.notify('Sample family loaded.', 'success');
-      }
-    } finally {
-      this.busy.set(null);
-    }
-  }
+  // ---- Danger zone ----
 
   protected async eraseVault(): Promise<void> {
     const alert = await this.alerts.create({

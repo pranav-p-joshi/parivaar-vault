@@ -190,24 +190,6 @@
       </div>
     </section>
 
-    <section class="pv-card">
-      <h2 class="section-title">
-        <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon> Sample
-        family
-      </h2>
-      <p class="help">
-        Example members and documents to explore the app. Numbers are made up.
-      </p>
-      <ion-button
-        class="pv-btn-sec"
-        (click)="toggleSamples()"
-        [disabled]="busy() !== null"
-      >
-        {{ samples.hasSamples() ? 'Remove sample family' : 'Load sample family'
-        }}
-      </ion-button>
-    </section>
-
     <section class="pv-card danger">
       <h2 class="section-title">
         <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>

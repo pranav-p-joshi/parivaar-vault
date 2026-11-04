@@ -211,9 +211,11 @@ ion-button.pv-btn-danger {
 ion-input,
 ion-select,
 ion-textarea {
+  /* `!important` beats Ionic's own :host defaults, which otherwise colour the
+     focused border and floating label with the dark navy primary (low contrast). */
   --border-radius: 8px;
-  --border-color: var(--pv-line);
-  --highlight-color-focused: var(--pv-saffron);
+  --border-color: var(--pv-line) !important;
+  --highlight-color-focused: var(--pv-saffron) !important;
   font-family: var(--pv-body);
 }
 

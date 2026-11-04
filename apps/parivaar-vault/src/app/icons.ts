@@ -4,6 +4,8 @@ import {
   checkmarkCircle,
   documentOutline,
   documentTextOutline,
+  eye,
+  eyeOff,
   folderOpenOutline,
   imageOutline,
   peopleOutline,
@@ -18,6 +20,10 @@ export function registerAppIcons(): void {
     checkmarkCircle,
     documentOutline,
     documentTextOutline,
+    // `eye` / `eyeOff` are used by `ion-input-password-toggle`, which looks them
+    // up by name; without this they render blank in a standalone Ionic app.
+    eye,
+    eyeOff,
     folderOpenOutline,
     imageOutline,
     peopleOutline,

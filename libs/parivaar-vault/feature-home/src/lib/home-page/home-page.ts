@@ -19,7 +19,6 @@ import {
   DocumentsStore,
   MembersStore,
   PlatformService,
-  SampleDataService,
   VaultLockService,
 } from '@pranav/pv-data-access';
 import {
@@ -36,7 +35,6 @@ import {
   documentsOutline,
   personAddOutline,
   shareSocialOutline,
-  sparklesOutline,
   swapHorizontalOutline,
 } from 'ionicons/icons';
 
@@ -66,7 +64,6 @@ export class HomePage {
   private readonly lock = inject(VaultLockService);
   protected readonly members = inject(MembersStore);
   protected readonly documents = inject(DocumentsStore);
-  protected readonly samples = inject(SampleDataService);
   protected readonly initials = initials;
 
   protected readonly selected = this.members.selected;
@@ -98,15 +95,11 @@ export class HomePage {
   protected readonly isEmpty = computed(
     () => this.members.loaded() && this.members.count() === 0,
   );
-  protected readonly noDocuments = computed(
-    () => this.documents.loaded() && this.documents.count() === 0,
-  );
 
   constructor() {
     addIcons({
       addOutline,
       personAddOutline,
-      sparklesOutline,
       documentsOutline,
       shareSocialOutline,
       createOutline,
@@ -120,10 +113,6 @@ export class HomePage {
 
   protected plural(n: number): string {
     return `${n} ${n === 1 ? 'doc' : 'docs'}`;
-  }
-
-  protected loadSamples(): void {
-    void this.samples.load();
   }
 
   protected editMember(): void {

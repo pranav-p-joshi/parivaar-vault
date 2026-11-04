@@ -179,8 +179,6 @@ export class AuthPage {
       return this.suError.set('Enter your email address.');
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
       return this.suError.set('That email does not look right.');
-    if (this.suPassword().length < 8)
-      return this.suError.set('Use at least 8 characters for the password.');
     if (this.suPassword() !== this.suConfirm())
       return this.suError.set("Passwords don't match.");
     if (!this.suTerms())

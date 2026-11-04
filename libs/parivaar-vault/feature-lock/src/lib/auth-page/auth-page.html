@@ -10,47 +10,56 @@
     </div>
 
     @if (awaitingCode()) {
-      <h1 class="pv-animate-in">Confirm your {{ verifyChannel() === 'phone' ? 'number' : 'email' }}</h1>
-      <p class="lead pv-animate-in" style="--pv-delay: 40ms">
-        @if (verifyChannel() === 'phone') {
-          We sent a code by SMS to +91 {{ suMobile() }}. Enter it to finish creating your vault.
-        } @else {
-          We sent a confirmation email to {{ suEmail() }}.
-        }
+    <h1 class="pv-animate-in">
+      Confirm your {{ verifyChannel() === 'phone' ? 'number' : 'email' }}
+    </h1>
+    <p class="lead pv-animate-in" style="--pv-delay: 40ms">
+      @if (verifyChannel() === 'phone') { We sent a code by SMS to +91 {{
+      suMobile() }}. Enter it to finish creating your vault. } @else { We sent a
+      confirmation email to {{ suEmail() }}. }
+    </p>
+    <form
+      class="panel pv-animate-in"
+      (submit)="$event.preventDefault(); verify()"
+    >
+      @if (verifyChannel() === 'email') {
+      <p class="pv-note left">
+        Open the confirmation link in that email, then come back and sign in
+        with your email and password. If the email contains a code instead,
+        enter it below.
       </p>
-      <form class="panel pv-animate-in" (submit)="$event.preventDefault(); verify()">
-        @if (verifyChannel() === 'email') {
-          <p class="pv-note left">
-            Open the confirmation link in that email, then come back and sign in with your email and password.
-            If the email contains a code instead, enter it below.
-          </p>
-          <ion-button expand="block" type="button" class="pv-btn" (click)="goToSignIn()">I have confirmed, sign in</ion-button>
-        }
-        <ion-input
-          label="Verification code"
-          labelPlacement="stacked"
-          fill="outline"
-          inputmode="numeric"
-          autocomplete="one-time-code"
-          placeholder="123456"
-          [maxlength]="8"
-          [value]="code()"
-          (ionInput)="code.set(digits($event.detail.value, 8))"
-          name="code"
-        ></ion-input>
-        @if (codeError()) {
-          <p class="err" role="alert">{{ codeError() }}</p>
-        }
-        <ion-button expand="block" type="submit" [class]="verifyChannel() === 'email' ? 'pv-btn-sec' : 'pv-btn'" [disabled]="busy()">
-          @if (busy()) {
-            <ion-spinner name="crescent" aria-label="Verifying"></ion-spinner>
-          } @else {
-            Verify and continue
-          }
-        </ion-button>
-        <ion-button expand="block" fill="clear" size="small" (click)="cancelVerify()">Start over</ion-button>
-      </form>
-    } @else { Verify and continue }
+      <ion-button
+        expand="block"
+        type="button"
+        class="pv-btn"
+        (click)="goToSignIn()"
+        >I have confirmed, sign in</ion-button
+      >
+      }
+      <ion-input
+        label="Verification code"
+        labelPlacement="stacked"
+        fill="outline"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        placeholder="123456"
+        [maxlength]="8"
+        [value]="code()"
+        (ionInput)="code.set(digits($event.detail.value, 8))"
+        name="code"
+      ></ion-input>
+      @if (codeError()) {
+      <p class="err" role="alert">{{ codeError() }}</p>
+      }
+      <ion-button
+        expand="block"
+        type="submit"
+        [class]="verifyChannel() === 'email' ? 'pv-btn-sec' : 'pv-btn'"
+        [disabled]="busy()"
+      >
+        @if (busy()) {
+        <ion-spinner name="crescent" aria-label="Verifying"></ion-spinner>
+        } @else { Verify and continue }
       </ion-button>
       <ion-button
         expand="block"
@@ -149,7 +158,10 @@
         (ionInput)="siPassword.set($event.detail.value ?? '')"
         name="password"
       >
-        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+        <ion-input-password-toggle
+          slot="end"
+          color="tertiary"
+        ></ion-input-password-toggle>
       </ion-input>
       @if (siError()) {
       <p class="err" role="alert">{{ siError() }}</p>
@@ -238,7 +250,10 @@
           (ionInput)="suPassword.set($event.detail.value ?? '')"
           name="suPassword"
         >
-          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          <ion-input-password-toggle
+            slot="end"
+            color="tertiary"
+          ></ion-input-password-toggle>
         </ion-input>
         <div class="meter" aria-hidden="true">
           <span
@@ -246,10 +261,9 @@
             [style.background]="strength().color"
           ></span>
         </div>
-        <div class="meter-txt">
-          {{ strength().label ? strength().label + ' password' : 'At least 8
-          characters. Mix letters, numbers and symbols.' }}
-        </div>
+        @if (strength().label) {
+        <div class="meter-txt">{{ strength().label }} password</div>
+        }
       </div>
       <ion-input
         label="Confirm password"
@@ -262,7 +276,10 @@
         (ionInput)="suConfirm.set($event.detail.value ?? '')"
         name="confirm"
       >
-        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+        <ion-input-password-toggle
+          slot="end"
+          color="tertiary"
+        ></ion-input-password-toggle>
       </ion-input>
       <ion-checkbox
         labelPlacement="end"

@@ -36,10 +36,6 @@
           <ion-icon slot="start" name="person-add-outline"></ion-icon>
           Add family member
         </ion-button>
-        <ion-button class="pv-btn-sec" (click)="loadSamples()">
-          <ion-icon slot="start" name="sparkles-outline"></ion-icon>
-          Explore with a sample family
-        </ion-button>
       </div>
     </shared-empty-state>
     } @else { @if (selected(); as m) {
@@ -140,16 +136,6 @@
       Nothing uploaded yet. Tap + to add a certificate, policy or any other
       paper.
     </div>
-    } @if (samples.hasSamples()) {
-    <p class="pv-note">
-      Sample records are shown as examples. Remove them from Settings when you
-      add real documents.
-    </p>
-    } @else if (noDocuments()) {
-    <ion-button class="pv-btn-sec" size="small" (click)="loadSamples()">
-      <ion-icon slot="start" name="sparkles-outline"></ion-icon>
-      Explore with a sample family
-    </ion-button>
     } }
   </div>
 
